@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+</head>
+<body>
+    <h2>Distance Calculator</h2>
+    <div>
+        <div>
+            <span>From Station</span>
+            <input type="text" id="txtStationFromS" data-bind="value: stationFrom" />
+            <span>To Station</span>
+            <input type="text" id="txtStationToS" data-bind="value: stationTo" />
+        </div>
+        <input type="button" id="btnCalculateS" value="Calculate" data-bind="click: getDistance" />
+        <div style="margin-top: 20px; font-weight: bold;">
+            <span id="lblResult" data-bind="text: resultText"></span>
+        </div>
+        <div style="margin-top: 20px; font-weight: bold;">
+            <span id="lblError" data-bind="text: error"></span>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var DistCalc = function () {
+            var self = this;
+
+            self.stationFrom = ko.observable();
+            self.stationTo = ko.observable();
+
+            self.distance = ko.observable();
+
+            self.error = ko.observable();
+
+            self.resultText = ko.computed(function () {
+                return self.distance() ? "Distance: " + self.distance() : '';
+            });
+
+            self.getDistance = function () {
+                self.distance(null);
+
+                var fromText = self.stationFrom();
+
+                if (!fromText) {
+                    self.error("Enter 'From Station'");
+                    return;
+                }
+
+                var toText = self.stationTo();
+
+                if (!toText) {
+                    self.error("Enter 'To Station'");
+                    return;
+                }
+
+                getDistanceApi(fromText, toText)
+                    .done(function (res) {
+                        self.distance(res);
+                        self.error(null);
+                    })
+                    .fail(function (e) {
+                        self.distance(null);
+                        self.error("Error: " + e);
+                    });
+            }
+
+            var getDistanceApi = function (from, to) {
+                var baseUrl = '/api/distanceCalculator/getDistance?stationNameFrom=' + from + '&stationNameTo=' + to;
+
+                var d = $.Deferred();
+
+                $.ajax({
+                    url: baseUrl,
+                    type: 'GET',
+                    success: function (data) {
+
+                        d.resolve(data);
+
+                    },
+                    error: function (xhr, status, error) {
+                        d.reject(xhr.responseJSON.Message);
+                    }
+                });
+
+                return d.promise();
+            }
+        };
+
+        ko.applyBindings(new DistCalc());
+
+        $(function () {
+            var baseUrl = '/api/distanceCalculator/findStations?';
+
+            $('#txtStationFromS, #txtStationToS').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: baseUrl + "name=" + request.term,
+                        dataType: "json",
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item.Name
+									
+                            }));
+                        },
+                        error: function (response) {
+                            //alert(response.responseText);
+                            console.info(response.responseText);
+                        }
+                    });
+                },
+                minLength: 3
+            });
+        });
+
+    </script>
+</body>
+</html>

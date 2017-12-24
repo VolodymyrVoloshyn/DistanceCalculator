@@ -1,0 +1,28 @@
+
+#Ignore files build by Visual Studio
+*.obj
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.cache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.suo
+*.dbmdl
+*.orig
+
+#Ignore folders build by Visual Studio
+obj
+bin
+Debug
+packages
