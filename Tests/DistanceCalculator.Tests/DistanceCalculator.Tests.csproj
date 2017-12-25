@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StationParcerTests.cs" />
     <Compile Include="StationsTests.cs" />
     <Compile Include="Stubs\StationData.cs" />
   </ItemGroup>
@@ -53,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StationProvider\StationProvider.csproj">
+      <Project>{84968bf5-4472-4dda-8c6c-2966279f094a}</Project>
+      <Name>StationProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Stations\Stations.csproj">
       <Project>{001a8ce3-1815-498b-9700-99f9a37b9d2b}</Project>
       <Name>Stations</Name>
