@@ -25,5 +25,57 @@ namespace DistanceCalculator.Tests
 			Assert.AreEqual(stationLat, station.Lat, "Station Lat");
 			Assert.AreEqual(stationLon, station.Lon, "Station Lon");
 		}
+
+		[Test]
+		public void Create_Station_EmptyName_Failed()
+		{
+			var stationId = StationData.StationId1;
+			var stationName = string.Empty;
+			var stationLat = StationData.Station1Lat;
+			var stationLon = StationData.Station1Lon;
+
+			// Act
+			Assert.Throws<ArgumentException>(() => new Station(stationId, stationName, stationLat, stationLon));
+
+		}
+
+		[Test]
+		public void Create_Station_NameIsNull_Failed()
+		{
+			var stationId = StationData.StationId1;
+			string stationName = null;
+			var stationLat = StationData.Station1Lat;
+			var stationLon = StationData.Station1Lon;
+
+			// Act
+			Assert.Throws<ArgumentNullException>(() => new Station(stationId, stationName, stationLat, stationLon));
+
+		}
+
+		[Test]
+		public void Create_Station_WhitespaceName_Failed()
+		{
+			var stationId = StationData.StationId1;
+			var stationName = " ";
+			var stationLat = StationData.Station1Lat;
+			var stationLon = StationData.Station1Lon;
+
+			// Act
+			Assert.Throws<ArgumentException>(() => new Station(stationId, stationName, stationLat, stationLon));
+
+		}
+
+		[Test]
+		public void Create_Station_WhitespacesOnlyName_Failed()
+		{
+			var stationId = StationData.StationId1;
+			var stationName = "            ";
+			var stationLat = StationData.Station1Lat;
+			var stationLon = StationData.Station1Lon;
+
+			// Act
+			Assert.Throws<ArgumentException>(() => new Station(stationId, stationName, stationLat, stationLon));
+
+		}
 	}
 }

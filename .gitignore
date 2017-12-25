@@ -26,3 +26,4 @@ obj
 bin
 Debug
 packages
+.vs
