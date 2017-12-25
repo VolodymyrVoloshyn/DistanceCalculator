@@ -22,22 +22,22 @@ namespace StationProvider
 
 			if (stationData.Length != 9)
 			{
-				throw new Exception("Station file contains data in invalid format");
+				throw new Exception("Input station data is in invalid format");
 			}
 
 			int id;
 
 			if (!int.TryParse(stationData[0], NumberStyles.Any, CultureInfo.InvariantCulture, out id))
 			{
-				throw new Exception("Station file contains data for station in invalid format");
+				throw new Exception("Input station data is in invalid format");
 			}
 
-			string name = stationData[1].Trim(' ', '"');
+			string name = stationData[1].Trim(' ', '"', '\'');
 
 			if (string.IsNullOrEmpty(name)
 				 || string.IsNullOrWhiteSpace(name))
 			{
-				throw new Exception("Station file contains data for station in invalid format");
+				throw new Exception("Input station data is in invalid format");
 			}
 
 			string description = stationData[2].Trim();
@@ -46,12 +46,12 @@ namespace StationProvider
 
 			if (!double.TryParse(stationData[3], NumberStyles.Any, CultureInfo.InvariantCulture, out lat))
 			{
-				throw new Exception("Station file contains data for station in invalid format");
+				throw new Exception("Input station data is in invalid format");
 			}
 
 			if (!double.TryParse(stationData[4].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out lon))
 			{
-				throw new Exception("Station file contains data for station in invalid format");
+				throw new Exception("Input station data is in invalid format");
 			}
 
 			int? zoneId = null;
@@ -68,7 +68,7 @@ namespace StationProvider
 
 			if (!int.TryParse(stationData[7], NumberStyles.Any, CultureInfo.InvariantCulture, out locationType))
 			{
-				throw new Exception("Station file contains data for station in invalid format");
+				throw new Exception("Input station data is in invalid format");
 			}
 
 			string parentId = stationData[8].Trim();
