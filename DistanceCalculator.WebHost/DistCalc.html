@@ -101,7 +101,7 @@
             $('#txtStationFromS, #txtStationToS').autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: baseUrl + "name=" + request.term,
+							  url: baseUrl + "namePattern=" + request.term,
                         dataType: "json",
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
