@@ -5,58 +5,60 @@ using Stations;
 
 namespace StationProvider
 {
-    public class TxtStationDataSource : IStationDataSource
-    {
-        private readonly string _stationListFilePath;
-        private readonly IStationParcer<string> _parcer;
+	public class TxtStationDataSource : IStationDataSource
+	{
+		private readonly string _stationListFilePath;
+		private readonly IStationParcer<string> _parcer;
 
-        public TxtStationDataSource(string stationListFilePath, IStationParcer<string> parcer)
-        {
-            _stationListFilePath = stationListFilePath;
-            _parcer = parcer;
-        }
-        public Dictionary<string, IStation> GetStations()
-        {
-            if (!File.Exists(_stationListFilePath))
-            {
-                throw new Exception("Stations file is not found;");
-            }
+		public TxtStationDataSource(string stationListFilePath, IStationParcer<string> parcer)
+		{
+			_stationListFilePath = stationListFilePath ?? throw new ArgumentNullException(nameof(stationListFilePath));
+			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
+		}
 
-            Dictionary<string, IStation> stations = new Dictionary<string, IStation>();
+		public Dictionary<string, IStation> GetStations()
+		{
+			if (!File.Exists(_stationListFilePath))
+			{
+				throw new Exception("Stations file is not found;");
+			}
 
-            using (StreamReader sr = new StreamReader(_stationListFilePath))
-            {
-                if (!sr.EndOfStream)
-                {
-                    // skipp first line
-                    sr.ReadLine();
-                }
-                else
-                {
-                    throw new Exception("Stations file is empty;");
-                }
+			Dictionary<string, IStation> stations = new Dictionary<string, IStation>();
 
-                while (sr.Peek() >= 0)
-                {
-                    var strLine = sr.ReadLine();
+			using (StreamReader sr = new StreamReader(_stationListFilePath))
+			{
+				if (!sr.EndOfStream)
+				{
+					// skip first line
+					sr.ReadLine();
+				}
+				else
+				{
+					throw new Exception("Stations file is empty;");
+				}
 
-                    var station = _parcer.Parce(strLine);
-                    if (station == null)
-                    {
-                        throw new Exception("Can't parce station. Station can't be null.");
-                    }
+				while (sr.Peek() >= 0)
+				{
+					var strLine = sr.ReadLine();
 
-                    if (stations.ContainsKey(station.Name))
-                    {
-                        continue;
-                        // or throw ?
-                    }
+					var station = _parcer.Parce(strLine);
+					if (station == null)
+					{
+						throw new Exception("Can't parce station. Station can't be null.");
+					}
 
-                    stations.Add(station.Name, station);
-                }
-            }
+					if (stations.ContainsKey(station.Name))
+					{
+						continue;
+						// or throw ?
+					}
 
-            return stations;
-        }
-    }
+					stations.Add(station.Name, station);
+				}
+			}
+
+			return stations;
+		}
+	}
 }
+ 

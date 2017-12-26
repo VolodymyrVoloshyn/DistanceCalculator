@@ -44,6 +44,8 @@
     <Compile Include="DataSource\IStationParcer.cs" />
     <Compile Include="DataSource\StringStationParcer.cs" />
     <Compile Include="DataSource\TxtStationDataSource.cs" />
+    <Compile Include="DataSource\TxtTextReaderStationDataSource.cs" />
+    <Compile Include="DataSource\TxtTextReaderStationFactoryDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StationProvider\IStationProvider.cs" />
     <Compile Include="StationProvider\TxtStationProvider.cs" />

@@ -32,7 +32,6 @@ namespace DistanceCalculatorApi
 			_stationProvider = stationProvider;
 		}
 
-
 		[HttpGet]
 		[Route("findStations")]
 		[ResponseType(typeof(IEnumerable<IStation>))]
