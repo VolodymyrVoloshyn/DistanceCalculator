@@ -5,7 +5,7 @@ using Stations;
 
 namespace StationProvider
 {
-	public class TxtStationDataSource : IStationDataSource
+	public class TxtStationDataSource : StationDataSource
 	{
 		private readonly string _stationListFilePath;
 		private readonly IStationParcer<string> _parcer;
@@ -16,7 +16,7 @@ namespace StationProvider
 			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
 		}
 
-		public Dictionary<string, IStation> GetStations()
+		public override Dictionary<string, IStation> GetStations()
 		{
 			if (!File.Exists(_stationListFilePath))
 			{

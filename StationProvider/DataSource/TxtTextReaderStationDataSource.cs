@@ -5,10 +5,11 @@ using Stations;
 
 namespace StationProvider
 {
-	public class TxtTextReaderStationDataSource : IStationDataSource
+	public class TxtTextReaderStationDataSource : StationDataSource
 	{
 		private readonly IStationParcer<string> _parcer;
-		private TextReader _textReader;
+		private readonly TextReader _textReader;
+	    private bool _disposed;
 
 		public TxtTextReaderStationDataSource(TextReader textReader, IStationParcer<string> parcer)
 		{
@@ -16,7 +17,7 @@ namespace StationProvider
 			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
 		}
 
-		public Dictionary<string, IStation> GetStations()
+		public override Dictionary<string, IStation> GetStations()
 		{
 			Dictionary<string, IStation> stations = new Dictionary<string, IStation>();
 
@@ -51,5 +52,22 @@ namespace StationProvider
 
 			return stations;
 		}
+
+	    protected override void Dispose(bool disposing)
+	    {
+	        if (_disposed)
+	        {
+                return;
+	        }
+
+	        if (disposing)
+	        {
+	            _textReader?.Dispose();
+	        }
+
+	        _disposed = true;
+
+	        base.Dispose(disposing);
+	    }
 	}
 }
