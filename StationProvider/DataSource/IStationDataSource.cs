@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Stations;
 
 namespace StationProvider
 {
-    public interface IStationDataSource
+     public interface IStationDataSource : IDisposable
     {
-        Dictionary<string, IStation> GetStations();
+        //Dictionary<string, IStation> GetStations();
+        IEnumerable<IStation> GetStations();
     }
 }

@@ -7,8 +7,9 @@ using System.Linq;
 
 namespace StationProvider
 {
-    public class TxtStationProvider : IStationProvider
+    public class TxtStationProvider : StationProvider
     {
+        private bool _disposed;
         private readonly IStationDataSource _stationDataSource;
 
         private Lazy<Dictionary<string, IStation>> _stations;//= new Lazy<Dictionary<string, IStation>>(()=> ReadStationFromSource());
@@ -25,7 +26,7 @@ namespace StationProvider
             _stations = new Lazy<Dictionary<string, IStation>>(ReadStationFromSource);
         }
 
-		public IEnumerable<IStation> FindStations(string namePattern)
+		public override IEnumerable<IStation> FindStations(string namePattern)
 		{
 			if (string.IsNullOrEmpty(namePattern)) {
 				throw new ArgumentException("Null Or Empty", nameof(namePattern));
@@ -36,8 +37,13 @@ namespace StationProvider
 			return _stations.Value.Where(i => i.Key.StartsWith(namePattern, StringComparison.InvariantCultureIgnoreCase)).Select(i => i.Value);
 		}
 
-		public IStation GetStation(string name)
+		public override IStation GetStation(string name)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
             if (_stations.Value.ContainsKey(name))
             {
                 return _stations.Value[name];
@@ -49,7 +55,6 @@ namespace StationProvider
                 {
                     return _stations.Value[name];
                 }
-
 
                 var newStations = ReadStationFromSource();
 
@@ -66,7 +71,38 @@ namespace StationProvider
 
         private Dictionary<string, IStation> ReadStationFromSource()
         {
-            return _stationDataSource.GetStations();
+            var result = new Dictionary<string, IStation>();
+
+            var stations = _stationDataSource.GetStations();
+
+            foreach (var station in stations)
+            {
+                if (result.ContainsKey(station.Name))
+                {
+                    continue;
+                }
+
+                result.Add(station.Name, station);
+            }
+
+            return result;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _stationDataSource?.Dispose();
+            }
+
+            _disposed = true;
+
+            base.Dispose(disposing);
         }
     }
 }

@@ -5,10 +5,13 @@ using Stations;
 
 namespace StationProvider
 {
-	public class TxtTextReaderStationFactoryDataSource : IStationDataSource
+    /// <summary>
+    /// All dependencies are provided, GetStations can be called many times
+    /// </summary>
+	public class TxtTextReaderStationFactoryDataSource : StationDataSource
 	{
 		private readonly IStationParcer<string> _parcer;
-		private Func<TextReader> _textReaderFactory;
+		private readonly Func<TextReader> _textReaderFactory;
 
 		public TxtTextReaderStationFactoryDataSource(Func<TextReader> textReaderFactory, IStationParcer<string> parcer)
 		{
@@ -16,46 +19,44 @@ namespace StationProvider
 			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
 		}
 
-		public Dictionary<string, IStation> GetStations()
+		public override IEnumerable<IStation> GetStations()
 		{
-			var textReader = _textReaderFactory();
+		    List<IStation> stations;
 
-			if (textReader == null) {
-				throw new Exception("Reader returned from factory is null.");
-			}
+		    using (var textReader = _textReaderFactory())
+		    {
+                if (textReader == null)
+                {
+                    throw new Exception("Reader returned from factory is null.");
+                }
 
-			Dictionary<string, IStation> stations = new Dictionary<string, IStation>();
+                stations = new List<IStation>();
 
-			if (textReader.Peek()!= -1)
-			{
-				// skip first line
-				textReader.ReadLine();
-			}
-			else
-			{
-				throw new Exception("Can't read from reader.");
-			}
+		        if (textReader.Peek()!= -1)
+		        {
+		            // skip first line
+		            textReader.ReadLine();
+		        }
+		        else
+		        {
+		            throw new Exception("Can't read from reader.");
+		        }
 
-			while (textReader.Peek() >= 0)
-			{
-				var strLine = textReader.ReadLine();
+		        while (textReader.Peek() >= 0)
+		        {
+		            var strLine = textReader.ReadLine();
 
-				var station = _parcer.Parce(strLine);
-				if (station == null)
-				{
-					throw new Exception("Can't parce station. Station can't be null.");
-				}
+		            var station = _parcer.Parce(strLine);
+		            if (station == null)
+		            {
+		                throw new Exception("Can't parce station. Station can't be null.");
+		            }
 
-				if (stations.ContainsKey(station.Name))
-				{
-					continue;
-					// or throw ?
-				}
+		            stations.Add(station);
+		        }
+		    }
 
-				stations.Add(station.Name, station);
-			}
-
-			return stations;
+		    return stations;
 		}
 	}
 }

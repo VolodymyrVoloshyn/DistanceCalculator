@@ -4,7 +4,7 @@ using Stations;
 
 namespace StationProvider
 {
-    public interface IStationProvider
+    public interface IStationProvider : IDisposable
     {
         IStation GetStation(string name);
         IEnumerable<IStation> FindStations(string namePattern);

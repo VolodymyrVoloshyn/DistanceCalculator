@@ -5,10 +5,14 @@ using Stations;
 
 namespace StationProvider
 {
-	public class TxtTextReaderStationDataSource : IStationDataSource
+    /// <summary>
+    /// All dependencies are provided, but GetStations can be called just once, because of TextReader which supports forward read only.
+    /// </summary>
+	public class TxtTextReaderStationDataSource : StationDataSource
 	{
 		private readonly IStationParcer<string> _parcer;
-		private TextReader _textReader;
+		private readonly TextReader _textReader;
+	    private bool _disposed;
 
 		public TxtTextReaderStationDataSource(TextReader textReader, IStationParcer<string> parcer)
 		{
@@ -16,9 +20,9 @@ namespace StationProvider
 			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
 		}
 
-		public Dictionary<string, IStation> GetStations()
+		public override IEnumerable<IStation> GetStations()
 		{
-			Dictionary<string, IStation> stations = new Dictionary<string, IStation>();
+			List<IStation> stations = new List<IStation>();
 
 			if (_textReader.Peek()!= -1)
 			{
@@ -40,16 +44,27 @@ namespace StationProvider
 					throw new Exception("Can't parce station. Station can't be null.");
 				}
 
-				if (stations.ContainsKey(station.Name))
-				{
-					continue;
-					// or throw ?
-				}
-
-				stations.Add(station.Name, station);
+				stations.Add(station);
 			}
 
 			return stations;
 		}
+
+	    protected override void Dispose(bool disposing)
+	    {
+	        if (_disposed)
+	        {
+                return;
+	        }
+
+	        if (disposing)
+	        {
+	            _textReader?.Dispose();
+	        }
+
+	        _disposed = true;
+
+	        base.Dispose(disposing);
+	    }
 	}
 }
