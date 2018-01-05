@@ -5,6 +5,9 @@ using Stations;
 
 namespace StationProvider
 {
+    /// <summary>
+    /// All dependencies are provided, GetStations can be called many times
+    /// </summary>
 	public class TxtTextReaderStationFactoryDataSource : StationDataSource
 	{
 		private readonly IStationParcer<string> _parcer;
@@ -16,9 +19,9 @@ namespace StationProvider
 			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
 		}
 
-		public override Dictionary<string, IStation> GetStations()
+		public override IEnumerable<IStation> GetStations()
 		{
-		    Dictionary<string, IStation> stations;
+		    List<IStation> stations;
 
 		    using (var textReader = _textReaderFactory())
 		    {
@@ -27,7 +30,7 @@ namespace StationProvider
                     throw new Exception("Reader returned from factory is null.");
                 }
 
-                stations = new Dictionary<string, IStation>();
+                stations = new List<IStation>();
 
 		        if (textReader.Peek()!= -1)
 		        {
@@ -49,13 +52,7 @@ namespace StationProvider
 		                throw new Exception("Can't parce station. Station can't be null.");
 		            }
 
-		            if (stations.ContainsKey(station.Name))
-		            {
-		                continue;
-		                // or throw ?
-		            }
-
-		            stations.Add(station.Name, station);
+		            stations.Add(station);
 		        }
 		    }
 

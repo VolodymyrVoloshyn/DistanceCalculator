@@ -10,7 +10,7 @@ using StationProvider;
 namespace DistanceCalculator.Tests
 {
 	[TestFixture]
-	public class TxtTextReaderStationDataSourceTests
+	public class TxtTextReaderStationFactoryDataSourceTests
     {
         [Test]
         public void GetStations_Success()
@@ -35,6 +35,10 @@ namespace DistanceCalculator.Tests
                 .Returns(stationData)
                 .Returns(stationData);
 
+
+            var funcMock = new Mock<Func<TextReader>>();
+
+            funcMock.Setup(f => f()).Returns(textReaderMock.Object);
             
             var stationParserMock = new Mock<IStationParcer<string>>();
 
@@ -43,12 +47,14 @@ namespace DistanceCalculator.Tests
                 .Returns(new Station(2, stationName2, 0, 0))
                 .Returns(new Station(3, stationName3, 0, 0));
             
-            var ds = new TxtTextReaderStationDataSource(textReaderMock.Object, stationParserMock.Object);
+            var ds = new TxtTextReaderStationFactoryDataSource(funcMock.Object, stationParserMock.Object);
 
             // Act
             var result= ds.GetStations();
 
             Assert.IsNotNull(result);
+
+            funcMock.Verify(f=> f(), Times.Once());
 
             textReaderMock.Verify(tr => tr.Peek(), Times.Exactly(5));
             textReaderMock.Verify(tr => tr.ReadLine(), Times.Exactly(4));
@@ -80,7 +86,11 @@ namespace DistanceCalculator.Tests
 
             textReaderMock.Setup(tr => tr.ReadLine())
                 .Returns(stationData);
-            
+
+            var funcMock = new Mock<Func<TextReader>>();
+
+            funcMock.Setup(f => f()).Returns(textReaderMock.Object);
+
             var stationParserMock = new Mock<IStationParcer<string>>();
 
             // returns the same station name 
@@ -88,13 +98,13 @@ namespace DistanceCalculator.Tests
                 .Returns(new Station(1, stationName1, 0, 0))
                 .Returns(new Station(2, stationName1, 0, 0))
                 .Returns(new Station(3, stationName1, 0, 0));
-            
-            var ds = new TxtTextReaderStationDataSource(textReaderMock.Object, stationParserMock.Object);
+
+            var ds = new TxtTextReaderStationFactoryDataSource(funcMock.Object, stationParserMock.Object);
 
             // Act
-            var result= ds.GetStations();
+            var result = ds.GetStations();
 
-            Assert.IsNotNull(result);
+            funcMock.Verify(f=> f(), Times.Once());
 
             textReaderMock.Verify(tr => tr.Peek(), Times.Exactly(5));
             textReaderMock.Verify(tr => tr.ReadLine(), Times.Exactly(4));
@@ -118,9 +128,28 @@ namespace DistanceCalculator.Tests
             textReaderMock.Setup(tr => tr.Peek())
                 .Returns(-1);
 
+            var funcMock = new Mock<Func<TextReader>>();
+
+            funcMock.Setup(f => f()).Returns(textReaderMock.Object);
+
             var stationParser = Mock.Of<IStationParcer<string>>();
 
-            var ds = new TxtTextReaderStationDataSource(textReaderMock.Object, stationParser);
+            var ds = new TxtTextReaderStationFactoryDataSource(funcMock.Object, stationParser);
+
+            // Act
+            Assert.Throws<Exception>(() => ds.GetStations());
+        }
+
+        [Test]
+        public void GetStations_FactoryReturnsNull_Failed()
+        {
+            var funcMock = new Mock<Func<TextReader>>();
+
+            funcMock.Setup(f => f()).Returns((TextReader)null);
+
+            var stationParser = Mock.Of<IStationParcer<string>>();
+
+            var ds = new TxtTextReaderStationFactoryDataSource(funcMock.Object, stationParser);
 
             // Act
             Assert.Throws<Exception>(() => ds.GetStations());
@@ -139,12 +168,16 @@ namespace DistanceCalculator.Tests
             textReaderMock.Setup(tr => tr.ReadLine())
                 .Returns(stationData);
 
+            var funcMock = new Mock<Func<TextReader>>();
+
+            funcMock.Setup(f => f()).Returns(textReaderMock.Object);
+
             var stationParserMock = new Mock<IStationParcer<string>>();
 
             stationParserMock.Setup(sp => sp.Parce(It.IsAny<string>()))
                 .Returns((IStation)null);
 
-            var ds = new TxtTextReaderStationDataSource(textReaderMock.Object, stationParserMock.Object);
+            var ds = new TxtTextReaderStationFactoryDataSource(funcMock.Object, stationParserMock.Object);
 
             // Act
             Assert.Throws<Exception>(() => ds.GetStations());

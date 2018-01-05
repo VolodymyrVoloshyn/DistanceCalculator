@@ -48,6 +48,7 @@
     <Compile Include="DataSource\TxtTextReaderStationDataSource.cs" />
     <Compile Include="DataSource\TxtTextReaderStationFactoryDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StationProvider\StationProvider.cs" />
     <Compile Include="StationProvider\IStationProvider.cs" />
     <Compile Include="StationProvider\TxtStationProvider.cs" />
   </ItemGroup>

@@ -4,8 +4,9 @@ using Stations;
 
 namespace StationProvider
 {
-    public interface IStationDataSource : IDisposable
+     public interface IStationDataSource : IDisposable
     {
-        Dictionary<string, IStation> GetStations();
+        //Dictionary<string, IStation> GetStations();
+        IEnumerable<IStation> GetStations();
     }
 }

@@ -5,6 +5,9 @@ using Stations;
 
 namespace StationProvider
 {
+    /// <summary>
+    /// All dependencies are provided, but GetStations can be called just once, because of TextReader which supports forward read only.
+    /// </summary>
 	public class TxtTextReaderStationDataSource : StationDataSource
 	{
 		private readonly IStationParcer<string> _parcer;
@@ -17,9 +20,9 @@ namespace StationProvider
 			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
 		}
 
-		public override Dictionary<string, IStation> GetStations()
+		public override IEnumerable<IStation> GetStations()
 		{
-			Dictionary<string, IStation> stations = new Dictionary<string, IStation>();
+			List<IStation> stations = new List<IStation>();
 
 			if (_textReader.Peek()!= -1)
 			{
@@ -41,13 +44,7 @@ namespace StationProvider
 					throw new Exception("Can't parce station. Station can't be null.");
 				}
 
-				if (stations.ContainsKey(station.Name))
-				{
-					continue;
-					// or throw ?
-				}
-
-				stations.Add(station.Name, station);
+				stations.Add(station);
 			}
 
 			return stations;

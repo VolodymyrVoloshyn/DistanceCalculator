@@ -4,10 +4,10 @@ using Stations;
 
 namespace StationProvider
 {
-    public abstract class StationDataSource : IStationDataSource//IDisposable
+    public abstract class StationProvider : IStationProvider
     {
-        //public abstract Dictionary<string, IStation> GetStations();
-        public abstract IEnumerable<IStation> GetStations();
+        public abstract IStation GetStation(string name);
+        public abstract IEnumerable<IStation> FindStations(string namePattern);
 
         public void Dispose()
         {

@@ -5,6 +5,9 @@ using Stations;
 
 namespace StationProvider
 {
+    /// <summary>
+    /// Can't be unit tested, because it creates StreamReader inside.
+    /// </summary>
 	public class TxtStationDataSource : StationDataSource
 	{
 		private readonly string _stationListFilePath;
@@ -16,14 +19,14 @@ namespace StationProvider
 			_parcer = parcer ?? throw new ArgumentNullException(nameof(parcer));
 		}
 
-		public override Dictionary<string, IStation> GetStations()
+		public override IEnumerable<IStation> GetStations()
 		{
 			if (!File.Exists(_stationListFilePath))
 			{
 				throw new Exception("Stations file is not found;");
 			}
 
-			Dictionary<string, IStation> stations = new Dictionary<string, IStation>();
+			List<IStation> stations = new List<IStation>();
 
 			using (StreamReader sr = new StreamReader(_stationListFilePath))
 			{
@@ -47,13 +50,7 @@ namespace StationProvider
 						throw new Exception("Can't parce station. Station can't be null.");
 					}
 
-					if (stations.ContainsKey(station.Name))
-					{
-						continue;
-						// or throw ?
-					}
-
-					stations.Add(station.Name, station);
+					stations.Add(station);
 				}
 			}
 

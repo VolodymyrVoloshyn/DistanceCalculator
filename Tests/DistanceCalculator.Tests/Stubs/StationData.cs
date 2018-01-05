@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Stations;
 
 namespace DistanceCalculator.Tests.Stubs
 {
@@ -67,5 +68,14 @@ namespace DistanceCalculator.Tests.Stubs
             "400051,\"MADISON AV/E 118 ST\",,  40.801506, -73.943619,,,0",
             "400053,\"MADISON AV/E 123 ST\",,  40.804649, -73.941376,,,0"
         };
+
+        public static  IStation[] Stations =
+        {
+            new Station(1, StationName1, 0.1, 0.1),
+            new Station(2, StationName2, 0.2, 0.2),
+            new Station(3, StationName3, 0.3, 0.3)
+        };
+
+        public static IStation Station4 = new Station(4, StationName4, 0.4, 0.4);
     }
 }
