@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using StationProvider.StationParcer;
 using Stations;
 
-namespace StationProvider
+namespace StationProvider.DataSource
 {
     /// <summary>
     /// All dependencies are provided, GetStations can be called many times

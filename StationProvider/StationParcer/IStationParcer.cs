@@ -1,6 +1,6 @@
 ﻿using Stations;
 
-namespace StationProvider
+namespace StationProvider.StationParcer
 {
     public interface IStationParcer<in T>
     {

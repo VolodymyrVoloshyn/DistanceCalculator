@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Stations;
 
-namespace StationProvider
+namespace StationProvider.DataSource
 {
      public interface IStationDataSource : IDisposable
     {

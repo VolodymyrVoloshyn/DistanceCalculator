@@ -1,47 +1,48 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Stations;
 
 namespace DistanceCalculator.Tests.Stubs
 {
     public static class StationData
     {
-        public static int StationId1 { get { return 4321; } }
-        public static string StationName1 { get { return "Station1"; } }
-        public static string StationName2 { get { return "Station2"; } }
-        public static string StationName3 { get { return "Station3"; } }
-        public static string StationName4 { get { return "Station4"; } }
+        public static int StationId1 => 4321;
+        public static string StationName1 => "Station1";
+        public static string StationName2 => "Station2";
+        public static string StationName3 => "Station3";
+        public static string StationName4 => "Station4";
 
-        public static double Station1Lat { get { return 34.6788; } }
-        public static double Station1Lon { get { return 22.2323; } }
+        public static string StationNamePattern1 => "Stati";
 
-        public static int StationId_StationDataString = 55555;
-        public static string StationName_StationDataString = "Station Number One";
-        public static double StationLat_StationDataString = 40.7;
-        public static double StationLon_StationDataString = 73.0133;
+        public static double Station1Lat => 34.6788;
+        public static double Station1Lon => 22.2323;
+
+        public static int StationIdStationDataString = 55555;
+        public static string StationNameStationDataString = "Station Number One";
+        public static double StationLatStationDataString = 40.7;
+        public static double StationLonStationDataString = 73.0133;
 
         public static string StationDataString = string.Format(CultureInfo.InvariantCulture, "{0}, {1} , Station Description ,  {2}, {3},,,0,",
-            StationId_StationDataString,
-            StationName_StationDataString,
-            StationLat_StationDataString,
-            StationLon_StationDataString);
+            StationIdStationDataString,
+            StationNameStationDataString,
+            StationLatStationDataString,
+            StationLonStationDataString);
 
-        public static string StationDataString_NotEnoughData = "2323, Station name,,";
-        public static string StationDataString_TooMuchData = "2333, Station name,,,,  33.3, -843.00,,,0,";
+        public static string StationDataStringNotEnoughData = "2323, Station name,,";
+        public static string StationDataStringTooMuchData = "2333, Station name,,,,  33.3, -843.00,,,0,";
 
-        public static string StationDataString_InvalidId = "Aa, Station name , Station Description ,  11.11, 22.22,,,0,";
+        public static string StationDataStringInvalidId = "Aa, Station name , Station Description ,  11.11, 22.22,,,0,";
 
-        public static string StationDataString_SingleQuotedStationName = string.Format(CultureInfo.InvariantCulture, "1234, '{0}' , Station Description ,  11.11, 22.22,,,0,",
-            StationName_StationDataString);
+        public static string StationDataStringSingleQuotedStationName = string.Format(CultureInfo.InvariantCulture, "1234, '{0}' , Station Description ,  11.11, 22.22,,,0,",
+            StationNameStationDataString);
 
-        public static string StationDataString_DoubleQuatedStationName = string.Format(CultureInfo.InvariantCulture, "1234, \"{0}\" , Station Description ,  11.11, 22.22,,,0,",
-            StationName_StationDataString);
+        public static string StationDataStringDoubleQuatedStationName = string.Format(CultureInfo.InvariantCulture, "1234, \"{0}\" , Station Description ,  11.11, 22.22,,,0,",
+            StationNameStationDataString);
 
-        public static string StationDataString_InvalidName_Empty = "1123,, Station Description ,  11.11, 22.22,,,0,";
-        public static string StationDataString_InvalidName_WhiteSpace = "1123,   , Station Description ,  11.11, 22.22,,,0,";
+        public static string StationDataStringInvalidNameEmpty = "1123,, Station Description ,  11.11, 22.22,,,0,";
+        public static string StationDataStringInvalidNameWhiteSpace = "1123,   , Station Description ,  11.11, 22.22,,,0,";
 
-        public static string StationDataString_InvalidLat = "1123, Station name  , Station Description ,  11 11, 22.22,,,0,";
-        public static string StationDataString_InvalidLon = "1123, Station name  , Station Description ,  11.11, 22q22,,,0,";
+        public static string StationDataStringInvalidLat = "1123, Station name  , Station Description ,  11 11, 22.22,,,0,";
+        public static string StationDataStringInvalidLon = "1123, Station name  , Station Description ,  11.11, 22q22,,,0,";
 
 
         public static string StationsDataMultilines =
@@ -74,6 +75,15 @@ namespace DistanceCalculator.Tests.Stubs
             new Station(1, StationName1, 0.1, 0.1),
             new Station(2, StationName2, 0.2, 0.2),
             new Station(3, StationName3, 0.3, 0.3)
+        };
+
+        public static IStation[] StationsWithDuplicates =
+        {
+            new Station(1, StationName1, 0.1, 0.1),
+            new Station(2, StationName2, 0.2, 0.2),
+            new Station(3, StationName3, 0.3, 0.3),
+            new Station(1, StationName1, 0.1, 0.1),
+            new Station(2, StationName2, 0.2, 0.2)
         };
 
         public static IStation Station4 = new Station(4, StationName4, 0.4, 0.4);

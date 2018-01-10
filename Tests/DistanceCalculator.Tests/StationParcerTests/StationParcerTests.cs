@@ -1,9 +1,9 @@
-﻿using DistanceCalculator.Tests.Stubs;
+﻿using System;
+using DistanceCalculator.Tests.Stubs;
 using NUnit.Framework;
-using StationProvider;
-using System;
+using StationProvider.StationParcer;
 
-namespace DistanceCalculator.Tests
+namespace DistanceCalculator.Tests.StationParcerTests
 {
 	[TestFixture]
 	public class StationParcerTests
@@ -11,10 +11,10 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_Success()
 		{
-			var stationId = StationData.StationId_StationDataString;
-			var stationName = StationData.StationName_StationDataString;
-			var stationLat = StationData.StationLat_StationDataString;
-			var stationLon = StationData.StationLon_StationDataString;
+			var stationId = StationData.StationIdStationDataString;
+			var stationName = StationData.StationNameStationDataString;
+			var stationLat = StationData.StationLatStationDataString;
+			var stationLon = StationData.StationLonStationDataString;
 
 			var inputDataString = StationData.StationDataString;
 
@@ -31,7 +31,7 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_NotEnoughData_Failed()
 		{
-			var inputDataString = StationData.StationDataString_NotEnoughData;
+			var inputDataString = StationData.StationDataStringNotEnoughData;
 
 			var parcer = new StringStationParcer();
 
@@ -41,7 +41,7 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_TooMuchData_Failed()
 		{
-			var inputDataString = StationData.StationDataString_TooMuchData;
+			var inputDataString = StationData.StationDataStringTooMuchData;
 
 			var parcer = new StringStationParcer();
 
@@ -51,7 +51,7 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_InvalidId_Failed()
 		{
-			var inputDataString = StationData.StationDataString_InvalidId;
+			var inputDataString = StationData.StationDataStringInvalidId;
 
 			var parcer = new StringStationParcer();
 
@@ -61,8 +61,8 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_SingleQuatedStationName_Success()
 		{
-			var stationName = StationData.StationName_StationDataString;
-			var inputDataString = StationData.StationDataString_SingleQuotedStationName;
+			var stationName = StationData.StationNameStationDataString;
+			var inputDataString = StationData.StationDataStringSingleQuotedStationName;
 
 			var parcer = new StringStationParcer();
 
@@ -74,8 +74,8 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_DoubleQuatedStationName_Success()
 		{
-			var stationName = StationData.StationName_StationDataString;
-			var inputDataString = StationData.StationDataString_DoubleQuatedStationName;
+			var stationName = StationData.StationNameStationDataString;
+			var inputDataString = StationData.StationDataStringDoubleQuatedStationName;
 
 			var parcer = new StringStationParcer();
 
@@ -87,7 +87,7 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_EmptyStationName_Failed()
 		{
-			var inputDataString = StationData.StationDataString_InvalidName_Empty;
+			var inputDataString = StationData.StationDataStringInvalidNameEmpty;
 
 			var parcer = new StringStationParcer();
 
@@ -97,7 +97,7 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_WhitespaceStationName_Failed()
 		{
-			var inputDataString = StationData.StationDataString_InvalidName_WhiteSpace;
+			var inputDataString = StationData.StationDataStringInvalidNameWhiteSpace;
 
 			var parcer = new StringStationParcer();
 
@@ -107,7 +107,7 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_InvalidLat_Failed()
 		{
-			var inputDataString = StationData.StationDataString_InvalidLat;
+			var inputDataString = StationData.StationDataStringInvalidLat;
 
 			var parcer = new StringStationParcer();
 
@@ -117,11 +117,35 @@ namespace DistanceCalculator.Tests
 		[Test]
 		public void Station_Parce_InvalidLon_Failed()
 		{
-			var inputDataString = StationData.StationDataString_InvalidLon;
+			var inputDataString = StationData.StationDataStringInvalidLon;
 
 			var parcer = new StringStationParcer();
 
 			Assert.Throws<Exception>(() => parcer.Parce(inputDataString));
 		}
-	}
+
+        [Test]
+	    public void Station_Parce_InputIsNull_Failed()
+	    {
+	        var parcer = new StringStationParcer();
+
+	        Assert.Throws<ArgumentException>(() => parcer.Parce(null));
+        }
+
+	    [Test]
+	    public void Station_Parce_InputIsEmptyString_Failed()
+	    {
+	        var parcer = new StringStationParcer();
+
+	        Assert.Throws<ArgumentException>(() => parcer.Parce(string.Empty));
+	    }
+
+	    [Test]
+	    public void Station_Parce_InputIsWhiteSpaceString_Failed()
+	    {
+	        var parcer = new StringStationParcer();
+
+	        Assert.Throws<ArgumentException>(() => parcer.Parce("    "));
+	    }
+    }
 }

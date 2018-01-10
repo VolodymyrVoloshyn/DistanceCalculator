@@ -30,6 +30,27 @@
 
     <script type="text/javascript">
         var DistCalc = function () {
+            var getDistanceApi = function(from, to) {
+                var baseUrl = '/api/distanceCalculator/getDistance?stationNameFrom=' + from + '&stationNameTo=' + to;
+
+                var d = $.Deferred();
+
+                $.ajax({
+                    url: baseUrl,
+                    type: 'GET',
+                    success: function(data) {
+
+                        d.resolve(data);
+
+                    },
+                    error: function(xhr, status, error) {
+                        d.reject(xhr.responseJSON.Message);
+                    }
+                });
+
+                return d.promise();
+            };
+
             var self = this;
 
             self.stationFrom = ko.observable();
@@ -70,27 +91,6 @@
                         self.error("Error: " + e);
                     });
             }
-
-            var getDistanceApi = function (from, to) {
-                var baseUrl = '/api/distanceCalculator/getDistance?stationNameFrom=' + from + '&stationNameTo=' + to;
-
-                var d = $.Deferred();
-
-                $.ajax({
-                    url: baseUrl,
-                    type: 'GET',
-                    success: function (data) {
-
-                        d.resolve(data);
-
-                    },
-                    error: function (xhr, status, error) {
-                        d.reject(xhr.responseJSON.Message);
-                    }
-                });
-
-                return d.promise();
-            }
         };
 
         ko.applyBindings(new DistCalc());
@@ -107,8 +107,8 @@
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
                             response($.map(data, function (item) {
-                                return item.Name
-									
+                                return item.Name;
+
                             }));
                         },
                         error: function (response) {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Stations
+﻿namespace Stations
 {
     public interface IStation
     {
