@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace DistanceCalculator.Tests.Calculator
 {
     [TestFixture]
-    public class KmDistanceCalculatorTests
+    public class KmStationDistanceCalculator
     {
         [Test]
         public void GetDistance_ParamsAreZero()

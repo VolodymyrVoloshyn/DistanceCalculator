@@ -86,6 +86,9 @@ namespace DistanceCalculator.Tests.Stubs
             new Station(2, StationName2, 0.2, 0.2)
         };
 
+        public static IStation Station1 = new Station(1, StationName1, 0.1, 0.1);
+        public static IStation Station2 = new Station(2, StationName2, 0.2, 0.2);
+
         public static IStation Station4 = new Station(4, StationName4, 0.4, 0.4);
     }
 }
