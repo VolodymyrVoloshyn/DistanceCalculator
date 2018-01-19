@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -8,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using StationProvider;
 using Stations;
+using System.Collections.Generic;
 
 namespace DistanceCalculator.Tests.DistanceCalculatorApi
 {
@@ -173,6 +175,69 @@ namespace DistanceCalculator.Tests.DistanceCalculatorApi
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new DistanceCalculatorController(Mock.Of<IStationDistanceCalculator>(), null));
+        }
+
+        [Test]
+        public void FindStation_Success()
+        {
+            var stationFindPattern = "stat";
+            var stations = StationData.Stations;
+
+            string stationFindPatternInternal= null;
+
+            var stationProviderMock = new Mock<IStationProvider>(MockBehavior.Strict);
+            stationProviderMock.Setup(p => p.FindStations(It.IsAny<string>()))
+                .Callback((string s)=> stationFindPatternInternal= s)
+                .Returns(stations);
+
+            var distCalcMock = new Mock<IStationDistanceCalculator>(MockBehavior.Strict);
+            
+            var distCalcController = new DistanceCalculatorController(distCalcMock.Object, stationProviderMock.Object);
+
+            distCalcController.Request = new HttpRequestMessage();
+            distCalcController.Configuration = new HttpConfiguration();
+
+            // Act
+
+            var response = distCalcController.FindStations(stationFindPattern);
+
+            distCalcMock.Verify();
+            stationProviderMock.Verify(p => p.FindStations(It.IsAny<string>()), Times.Once);
+
+            Assert.AreEqual(stationFindPattern, stationFindPatternInternal, "Station name pattern parameter passed to FindStation method of station provider is incorrect.");
+
+            IEnumerable<IStation> resultStations;
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsTrue(response.TryGetContentValue(out resultStations));
+
+            Assert.AreEqual(stations, resultStations, "Result stations is incorrect");
+        }
+
+        [Test]
+        public void FindStation_Failed()
+        {
+            var stationFindPattern = "stat";
+            
+            var stationProviderMock = new Mock<IStationProvider>(MockBehavior.Strict);
+            stationProviderMock.Setup(p => p.FindStations(It.IsAny<string>()))
+                .Throws<Exception>();
+
+            var distCalcMock = new Mock<IStationDistanceCalculator>(MockBehavior.Strict);
+
+            var distCalcController = new DistanceCalculatorController(distCalcMock.Object, stationProviderMock.Object);
+
+            distCalcController.Request = new HttpRequestMessage();
+            distCalcController.Configuration = new HttpConfiguration();
+
+            // Act
+
+            var response = distCalcController.FindStations(stationFindPattern);
+
+            distCalcMock.Verify();
+            stationProviderMock.Verify(p => p.FindStations(It.IsAny<string>()), Times.Once);
+
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }

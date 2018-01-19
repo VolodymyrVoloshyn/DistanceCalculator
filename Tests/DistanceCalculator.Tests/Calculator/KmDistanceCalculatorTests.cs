@@ -11,6 +11,18 @@ namespace DistanceCalculator.Tests.Calculator
     public class KmStationDistanceCalculator
     {
         [Test]
+        public void GetDistance_CheckResultValue_Success()
+        {
+            var calculator = new KmDistanceCalculator();
+            var expectedResult = 3.719;
+            // Act
+
+            var result = calculator.GetDistance(40.781155, -73.958481, 40.810429, -73.937111);
+
+            Assert.That(result, Is.EqualTo(expectedResult).Within(0.001));
+        }
+
+        [Test]
         public void GetDistance_ParamsAreZero()
         {
             var calculator = new KmDistanceCalculator();
