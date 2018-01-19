@@ -37,8 +37,8 @@ namespace DistanceCalculator.Tests
 			var stationLat = StationData.Station1Lat;
 			var stationLon = StationData.Station1Lon;
 
-			// Act
-			Assert.Throws<ArgumentException>(() => new Station(stationId, stationName, stationLat, stationLon));
+            // Act
+            Assert.Throws<ArgumentException>(()=> new Station(stationId, stationName, stationLat, stationLon));
 
 		}
 
@@ -46,12 +46,11 @@ namespace DistanceCalculator.Tests
 		public void Create_Station_NameIsNull_Failed()
 		{
 			var stationId = StationData.StationId1;
-			string stationName = null;
 			var stationLat = StationData.Station1Lat;
 			var stationLon = StationData.Station1Lon;
 
 			// Act
-			Assert.Throws<ArgumentNullException>(() => new Station(stationId, stationName, stationLat, stationLon));
+			Assert.Throws<ArgumentNullException>(() => new Station(stationId, null, stationLat, stationLon));
 
 		}
 
@@ -65,7 +64,6 @@ namespace DistanceCalculator.Tests
 
 			// Act
 			Assert.Throws<ArgumentException>(() => new Station(stationId, stationName, stationLat, stationLon));
-
 		}
 
 		[Test]
@@ -78,7 +76,6 @@ namespace DistanceCalculator.Tests
 
 			// Act
 			Assert.Throws<ArgumentException>(() => new Station(stationId, stationName, stationLat, stationLon));
-
 		}
 	}
 }

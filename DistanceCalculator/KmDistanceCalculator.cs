@@ -14,8 +14,17 @@ namespace DistanceCalculator
                 Math.Cos(Deg2Rad(lat1)) * Math.Cos(Deg2Rad(lat2)) *
                 Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
 
+
+
             var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
             var d = R * c; // Distance in km
+
+            if (double.IsNaN(d)
+                || double.IsInfinity(d))
+            {
+                throw new Exception("Can't calculate distance. Check input parameters.");
+            }
+
             return d;
         }
 

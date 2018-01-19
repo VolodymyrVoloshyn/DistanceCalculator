@@ -42,7 +42,7 @@ namespace DistanceCalculatorApi
 		        var res = _stationProvider.FindStations(namePattern);
 		        return Request.CreateResponse(HttpStatusCode.OK, res);
             }
-		    catch (Exception ex)
+		    catch (Exception)
 		    {
 		        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Can't get stations list");
 		    }
@@ -62,7 +62,7 @@ namespace DistanceCalculatorApi
 			{
 				stationFrom = _stationProvider.GetStation(stationNameFrom);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "'Station From' not found");
 			}
@@ -71,7 +71,7 @@ namespace DistanceCalculatorApi
 			{
 				stationTo = _stationProvider.GetStation(stationNameTo);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "'Station To' not found");
 			}

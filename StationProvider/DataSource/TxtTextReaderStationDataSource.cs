@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using StationProvider.StationParcer;
 using Stations;
 
-namespace StationProvider
+namespace StationProvider.DataSource
 {
     /// <summary>
     /// All dependencies are provided, but GetStations can be called just once, because of TextReader which supports forward read only.

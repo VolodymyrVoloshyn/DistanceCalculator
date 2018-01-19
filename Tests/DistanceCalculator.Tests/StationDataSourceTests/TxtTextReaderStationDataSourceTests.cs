@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
-using Stations;
 using DistanceCalculator.Tests.Stubs;
 using Moq;
-using StationProvider;
+using NUnit.Framework;
+using StationProvider.DataSource;
+using StationProvider.StationParcer;
+using Stations;
 
-namespace DistanceCalculator.Tests
+namespace DistanceCalculator.Tests.StationDataSourceTests
 {
 	[TestFixture]
 	public class TxtTextReaderStationDataSourceTests

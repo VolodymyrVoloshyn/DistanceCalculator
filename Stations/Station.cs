@@ -27,12 +27,12 @@ namespace Stations
 			Lon = lon;
 		}
 
-		public int Id { get; private set; }
+		public int Id { get; }
 
-		public string Name { get; private set; }
+		public string Name { get; }
 
-		public double Lat { get; private set; }
+		public double Lat { get; }
 
-		public double Lon { get; private set; }
+		public double Lon { get; }
 	}
 }

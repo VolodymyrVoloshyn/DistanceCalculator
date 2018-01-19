@@ -1,8 +1,8 @@
 ﻿using System;
-using Stations;
 using System.Globalization;
+using Stations;
 
-namespace StationProvider
+namespace StationProvider.StationParcer
 {
 	public class StringStationParcer : IStationParcer<string>
 	{
@@ -40,7 +40,7 @@ namespace StationProvider
 				throw new Exception("Input station data is in invalid format");
 			}
 
-			string description = stationData[2].Trim();
+			string unused = stationData[2].Trim();
 
 			double lat, lon;
 
@@ -54,24 +54,20 @@ namespace StationProvider
 				throw new Exception("Input station data is in invalid format");
 			}
 
-			int? zoneId = null;
-			int i;
-
-			if (int.TryParse(stationData[5].Trim(), out i))
+            // not used
+		    if (int.TryParse(stationData[5].Trim(), out _))
 			{
-				zoneId = i;
 			}
 
-			string stopUrl = stationData[6].Trim();
+			string unused1 = stationData[6].Trim();
 
-			int locationType;
-
-			if (!int.TryParse(stationData[7], NumberStyles.Any, CultureInfo.InvariantCulture, out locationType))
+		    // not used
+            if (!int.TryParse(stationData[7], NumberStyles.Any, CultureInfo.InvariantCulture, out _))
 			{
 				throw new Exception("Input station data is in invalid format");
 			}
 
-			string parentId = stationData[8].Trim();
+			string unused2 = stationData[8].Trim();
 			
 			return new Station(id, name, lat, lon);
 		}

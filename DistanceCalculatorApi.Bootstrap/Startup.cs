@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading.Tasks;
+using System.IO;
 using System.Web.Http;
 using DistanceCalculator;
+using DistanceCalculatorApi.Bootstrap;
 using Microsoft.Owin;
 using Owin;
 using StationProvider;
-using Unity.WebApi;
-//using Microsoft.Practices.Unity;
+using StationProvider.DataSource;
+using StationProvider.StationParcer;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
-using System.IO;
+using Unity.WebApi;
+//using Microsoft.Practices.Unity;
 
-[assembly: OwinStartup(typeof(WebApplication3.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 
-namespace WebApplication3
+namespace DistanceCalculatorApi.Bootstrap
 {
 	public class Startup
 	{
-		private Lazy<IUnityContainer> _container = new Lazy<IUnityContainer>(() =>
+		private readonly Lazy<IUnityContainer> _container = new Lazy<IUnityContainer>(() =>
 		{
 			var container = new UnityContainer();
 
@@ -39,13 +41,7 @@ namespace WebApplication3
 				 * Register station data source
 				 * Choose only one 
 				*/
-
-				/*
-					// register station data source with file path
-					.RegisterType<IStationDataSource, TxtStationDataSource>(
-						new InjectionConstructor(ConfigurationManager.AppSettings["stationFilePath"], typeof(IStationParcer<string>)))
-				*/
-
+				
 				/*
 				// register station data source with TextReader 
 				// and StreamReader as implementation TextReader + file path for it
